@@ -8,36 +8,7 @@
 </head>
 
 <body>
-    <div id="app">
-        <!-- {{ msg }} -->
-        {{ age }}
-        {{ arr }}
-    </div>
-    <script src="./vue.js"></script>
-    <script>
-        const vm = new Vue({
-            el: '#app',
-            data: {
-                msg: '欢迎来到王者荣耀',
-                age: 23,
-                arr: [1, 2, 3, 4],
-                heros: {
-                    name: '鲁班大师',
-                    son: '鲁班七号'
-                }
-            }
-        })
-
-        // nextTick 渲染完毕后会立即执行
-        vm.age = 25;
-        console.log(vm.age, vm.$el.innerText);
-        vm.age = 28;
-        console.log(vm.age, vm.$el.innerText);
-        vm.age = 30;
-        vm.$nextTick().then( () => {
-            console.log(vm.age, vm.$el.innerText)
-        })
-    </script>
+    <script src="./observer.js"></script>
 </body>
 
 </html>
