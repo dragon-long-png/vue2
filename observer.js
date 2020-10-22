@@ -57,4 +57,40 @@ function observer(data) {
         }
     }
 }
+
+/**
+ * 
+ * @param {*} data 要改谁
+ * @param {*} key 要改的属性
+ * @param {*} value 改成什么
+ */
+function $set(data, key, value) {
+    // 数组
+    if (Array.isArray(data)) {
+        data.splice(key, 1, value)
+        return value;
+    }
+    // 对象
+    definePro(data, key, value);
+    render();
+    return value;
+}
+
+
+/**
+ * 
+ * @param {*} data  删除谁 
+ * @param {*} key 删除哪个属性
+ */
+function $delete(data, key) {
+    // 数组
+    if (Array.isArray(data)) {
+        data.splice(key, 1);
+        return;
+    }
+    // 对象
+    delete data[key];
+    render();
+}
+
 observer(data);
