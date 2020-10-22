@@ -18,7 +18,7 @@ let arrayProto = Array.prototype;
 // 复制一个，防止污染Array.prototype中函数
 let arrayMethod = Object.create(arrayProto);
 // 数组改写的变异方法，用来针对数组响应式
-['push', 'pop', 'shift', 'unshift', 'sort', 'reverse', 'splice'].forEach(function (item) {
+['push', 'pop', 'shift', 'unshift', 'sort', 'reverse', 'splice'].forEach(item => {
     arrayMethod[item] = function () {
         arrayProto[item].call(this, ...arguments);
         render();
