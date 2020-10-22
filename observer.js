@@ -8,21 +8,22 @@ const data = {
     },
     arr: [1, 2, 3]
 }
-let arrayProto = Array.prototype;
-// 复制一个，防止污染Array.prototype中函数
-let arrayMethod = Object.create(arrayProto);
-// 数组改写的变异方法，用来针对数组响应式
-['push', 'pop', 'shift', 'unshift', 'sort', 'reverse', 'splice'].forEach(item => {
-    arrayMethod[item] = function () {
-        arrayMethod[item].call(this, ...arguments);
-        render();
-    }
-})
 
 
 function render() {
     console.log('响应式触发，页面渲染');
 }
+
+let arrayProto = Array.prototype;
+// 复制一个，防止污染Array.prototype中函数
+let arrayMethod = Object.create(arrayProto);
+// 数组改写的变异方法，用来针对数组响应式
+['push', 'pop', 'shift', 'unshift', 'sort', 'reverse', 'splice'].forEach(function (item) {
+    arrayMethod[item] = function () {
+        arrayProto[item].call(this, ...arguments);
+        render();
+    }
+})
 
 function definePro(data, key, value) {
     // 如果子属性是对象的话则进行递归
