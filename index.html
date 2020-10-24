@@ -9,26 +9,56 @@
 
 <body>
     <div id="app">
-        <button @click='addCount($event, 4)'>点击</button>
-        <button v-on="{click: addOnce}">加1</button>
-        <p>点击了{{ count }}次</p>
+        <ul>
+            <!-- <li v-for="person in persons" :key="person.name">{{ person.name }}</li> -->
+            <!-- <li v-for="person of persons" :key="person.name">{{ person.name }}</li> -->
+            <!-- <li v-for="(value, key, index) in shan">{{ value }} -- {{ key }} -- {{ index }}</li> -->
+            <!-- <li v-for="num in 10" :key="num">{{ num }}</li> -->
+            <!-- <li v-for="str in 'Object'" :key="str">{{ str }}</li> -->
+            <!-- <template  v-for="person in persons">
+                <li>{{ person.name }}</li>
+                <span>{{ person.age }}</span>
+            </template> -->
+            <li v-for="person in acitvePer" :key="person.name">
+                {{ person.name }}
+            </li>
+        </ul>
     </div>
     <script src="vue.js"></script>
     <script>
         const vm = new Vue({
             el: '#app',
             data: {
-                count: 0
-            },
-            methods: {
-                addCount (e, num) {
-                    this.count += num;
+                persons: [{
+                        name: '杉杉',
+                        age: 18,
+                        isActive: true
+                    },
+                    {
+                        name: '思彤哥',
+                        age: 20,
+                        isActive: false
+                    },
+                    {
+                        name: '成哥',
+                        age: 22,
+                        isActive: true
+                    },
+                    {
+                        name: '邓哥',
+                        age: 88,
+                        isActive: false
+                    }
+                ],
+                shan: {
+                    name: '杉',
+                    age: 18,
+                    height: '163cm'
                 },
-                addOnce () {
-                    this.count += 1;
-                }
+                acitvePer: []
             }
         })
+        vm.acitvePer = vm.persons.filter( item => item.isActive)
     </script>
 </body>
 
