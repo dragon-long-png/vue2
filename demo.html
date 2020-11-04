@@ -10,91 +10,90 @@
 
 <body>
     <div id="app">
-        <dl v-for="(goods, goodsIndex) in goodsList" :key="goods.data">
-            <dt>{{ goods.title }}</dt>
-            <dd>
-                <span v-for="(type, typeIndex) in goods.typeList" :class="{active: typeIndex === goods.curIndex}"
-                    @click="changeType(typeIndex, goodsIndex, type)">
-                    {{ type }}
-                </span>
-            </dd>
-        </dl>
-        <div class="choose">
-            <p>已选条件:</p>
-            <span class="no" v-if="!isShow">暂时没有选择过滤条件</span>
-            <ul class="choose-list" v-else>
-                <li v-for="(item, index) in chooseList" :key="item">
-                    {{ item }}
-                    <span class="delete" @click="delType(index)">x</span>
-                </li>
-            </ul>
+        <div class="title">
+            <div class="content">
+                <p>toDoList</p>
+                <div class="ipt">
+                    <input type="text" @input="eventListen" :value="searchWords">
+                    <button @click="addEvent">添加</button>
+                </div>
+            </div>
+            <div class="conduct">
+                <div class="head">
+                    正在进行
+                    <span>{{ conductEvents.length }}</span>
+                </div>
+                <ul>
+                    <li v-for="(item, index) in conductEvents" :key="item.id">
+                        <div class="left">
+                            <input type="checkbox" @click="changeStatus(index, 'ed')">
+                            {{ item.title }}
+                        </div>
+                        <button class="del" @click="delEvents(index, 'ed')">删除</button>
+                    </li>
+                </ul>
+            </div>
+            <div class="complete">
+                <div class="head">
+                    已经完成
+                    <span>{{ completeEvents.length }}</span>
+                </div>
+                <ul>
+                    <li v-for="(item, index) in completeEvents" :key="item.id">
+                        <div class="left">
+                            <input type="checkbox" @click="changeStatus(index, 'ing')">
+                            {{ item.title }}
+                        </div>
+                        <button class="del" @click="delEvents(index, 'ing')">删除</button>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <script src="./vue.js"></script>
     <script>
-        /**
-         * 1.结构渲染，
-         * 2.添加默认class类名 - 默认是下标为0 - 点击可进行切换更改class类名
-         * 3.添加过滤条件
-         */
         const vm = new Vue({
             el: '#app',
             data: {
-                goodsList: [{
-                        title: '上装',
-                        typeList: ['全部', '针织衫', '毛呢外套', 'T恤', '羽绒服', '棉衣', '卫衣', '风衣'],
-                        id: 1,
-                    },
-                    {
-                        title: '裤装',
-                        typeList: ['全部', '牛仔裤', '小脚/铅笔裤', '休闲裤', '打底裤', '哈伦裤'],
-                        id: 2,
-                    },
-                    {
-                        title: '裙装',
-                        typeList: ['全部', '连衣裙', '半身裙', '长袖连衣裙', '中长款连衣裙'],
-                        id: 3,
-                    }
-                ],
-                chooseList: {},
-                isShow: false
+                searchWords: '',
+                conductEvents: [],
+                completeEvents: []
             },
             methods: {
-                changeType(typeIndex, goodsIndex, type) {
-                    // 避免重复操作
-                    if (this.goodsList[goodsIndex].curIndex === typeIndex) {
-                        return;
-                    }
-                    // 如果点击的是全部，则索引变为0，然后return
-                    if(type == '全部') {
-                        this.goodsList[goodsIndex].curIndex = 0;
-                        delete this.chooseList[this.goodsList[goodsIndex].title] 
-                        return;
-                    }
-                    // 更改索引位置
-                    this.goodsList[goodsIndex].curIndex = typeIndex;
-                    this.isShow = true;
-                    // 添加过滤条件
-                    vm.$set(this.chooseList, this.goodsList[goodsIndex].title, this.goodsList[goodsIndex].typeList[typeIndex])
+                // 监听input输入内容
+                eventListen(e) {
+                    this.searchWords = e.target.value;
                 },
-                delType(index) {
-                    delete this.chooseList[index];
-                    // 点击删除按钮后，添加默认class类名
-                    this.goodsList.forEach( item => {
-                        if(item.title === index) {
-                            item.curIndex = 0;
-                        }
-                    })
-                    // 将对象转换为字符串，判断是否为空，如果为空，切换布尔值
-                    const str = JSON.stringify(this.chooseList);
-                    if(str === "{}") {
-                        this.isShow = false;
+                // 添加正在进行
+                addEvent() {
+                    if (this.searchWords === '') {
+                        return
+                    }
+                    this.conductEvents.push({
+                        title: this.searchWords,
+                        id: Math.random()
+                    });
+                    this.searchWords = '';
+                },
+                // 事件删除
+                delEvents(index, type) {
+                    const item = type === 'ed' ? this.conductEvents : this.completeEvents;
+                    item.splice(index, 1)
+                },
+                // 事件状态改变
+                // ed => 从正在进行到已经完成
+                // ing => 从已经完成到正在进行
+                changeStatus(index, type) {
+                    if(type === 'ed') {
+                        const item = this.conductEvents.splice(index, 1);
+                        this.completeEvents.push(...item);
+                    } else if (type == 'ing') {
+                        const item = this.completeEvents.splice(index, 1);
+                        this.conductEvents.push(...item);
                     }
                 }
             }
         })
-        // 添加一个索引，用来标记当前选中类目
-        vm.goodsList.forEach(item => vm.$set(item, 'curIndex', 0))
     </script>
 </body>
 
