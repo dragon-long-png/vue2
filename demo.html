@@ -26,7 +26,7 @@
                 <ul>
                     <li v-for="(item, index) in conductEvents" :key="item.id">
                         <div class="left">
-                            <input type="checkbox" @click="changeStatus(index, 'ed')">
+                            <input type="checkbox" @change="changeStatus(index, 'ed')">
                             {{ item.title }}
                         </div>
                         <button class="del" @click="delEvents(index, 'ed')">删除</button>
@@ -41,7 +41,7 @@
                 <ul>
                     <li v-for="(item, index) in completeEvents" :key="item.id">
                         <div class="left">
-                            <input type="checkbox" @click="changeStatus(index, 'ing')">
+                            <input type="checkbox" @change="changeStatus(index, 'ing')">
                             {{ item.title }}
                         </div>
                         <button class="del" @click="delEvents(index, 'ing')">删除</button>
